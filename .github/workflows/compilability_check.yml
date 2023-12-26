@@ -22,3 +22,10 @@ jobs:
           export ANDROID_SDK_HOME=$ANDROID_HOME
           export ANDROID_NDK_HOME=$ANDROID_NDK_LATEST_HOME
           ./ffmpeg-android-maker.sh -all-free -all-gpl -android=24 -abis=${{ matrix.abi }}
+      - run: echo "Build status report=${{ job.status }}."  
+      - name: Upload_assets
+        uses: actions/upload-artifact@v3
+        with:
+          name: ffassets
+          retention-days: 7
+          path: ${{ github.workspace }}/*.zip   
