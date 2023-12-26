@@ -1,13 +1,13 @@
-FROM ubuntu:20.04
+FROM --platform=linux/amd64 ubuntu:22.04
 
 # Arguments that can be overridden in 'docker build' command:
 # Versions of Android SDK and NDK. The CMake is installed via NDK.
-ARG VERSION_SDK=6858069
-ARG VERSION_NDK=21.4.7075529
-ARG VERSION_CMAKE=3.10.2.4988404
+ARG VERSION_SDK=10406996
+ARG VERSION_NDK=26.1.10909125
+ARG VERSION_CMAKE=3.22.1
 
 # Package to install via pip3
-ARG VERSION_MESON=0.57.1
+ARG VERSION_MESON=1.2.2
 
 # The HOME variable isn't available for ENV directive (during building an image).
 # So we define one manually. For alpine and ubuntu it should be '/root'
@@ -18,20 +18,21 @@ ENV ANDROID_SDK_HOME=${HOME_TWIN}/android-sdk
 ENV ANDROID_NDK_HOME=${ANDROID_SDK_HOME}/ndk/${VERSION_NDK}
 
 # Installing basic software
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get --allow-releaseinfo-change update && apt-get install -y --no-install-recommends \
   python3 \
   python3-pip \
   python3-setuptools \
   python3-wheel \
   ninja-build \
   build-essential \
-  openjdk-8-jdk-headless \
+  openjdk-17-jdk-headless \
   curl \
   unzip \
   bash \
   nasm \
   pkg-config \
   make \
+  git \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

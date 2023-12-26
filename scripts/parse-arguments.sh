@@ -7,10 +7,9 @@
 # Can be overridden with specific arguments.
 # See the end of this file for more description.
 ABIS_TO_BUILD=()
-API_LEVEL=16
+API_LEVEL=21
 SOURCE_TYPE=TAR
-SOURCE_VALUE=4.3.1
-BINUTILS=gnu
+SOURCE_VALUE=6.1
 EXTERNAL_LIBRARIES=()
 FFMPEG_GPL_ENABLED=false
 
@@ -20,17 +19,20 @@ SUPPORTED_LIBRARIES_FREE=(
   "libdav1d"
   "libmp3lame"
   "libopus"
-  "libwavpack"
   "libtwolame"
   "libspeex"
   "libvpx"
+  "libwebp"
   "libfreetype"
   "libfribidi"
+  "mbedtls"
+  "libbluray"
 )
 
 # All GPL libraries that are supported
 SUPPORTED_LIBRARIES_GPL=(
   "libx264"
+  "libx265"
 )
 
 for argument in "$@"; do
@@ -74,18 +76,6 @@ for argument in "$@"; do
     SOURCE_TYPE=TAR
     SOURCE_VALUE="${argument#*=}"
     ;;
-  # Which binutils to use (gnu or llvm)
-  --binutils=* | -binutils=*)
-    binutils_value="${argument#*=}"
-    case $binutils_value in
-    gnu | llvm)
-      BINUTILS=$binutils_value
-      ;;
-    *)
-      echo "Unknown binutils: $binutils_value"
-      ;;
-    esac
-    ;;
   # Arguments below enable certain external libraries to build into FFmpeg
   --enable-libaom | -aom)
     EXTERNAL_LIBRARIES+=("libaom")
@@ -98,6 +88,9 @@ for argument in "$@"; do
     ;;
   --enable-libopus | -opus)
     EXTERNAL_LIBRARIES+=("libopus")
+    ;;
+  --enable-libwebp | -webp)
+    EXTERNAL_LIBRARIES+=("libwebp")
     ;;
   --enable-libwavpack | -wavpack)
     EXTERNAL_LIBRARIES+=("libwavpack")
@@ -121,6 +114,16 @@ for argument in "$@"; do
     EXTERNAL_LIBRARIES+=("libx264")
     FFMPEG_GPL_ENABLED=true
     ;;
+  --enable-libx265 | -x265)
+    EXTERNAL_LIBRARIES+=("libx265")
+    FFMPEG_GPL_ENABLED=true
+    ;;
+  --enable-mbedtls | -mbedtls)
+    EXTERNAL_LIBRARIES+=("mbedtls")
+    ;;
+  --enable-libbluray | -bluray)
+    EXTERNAL_LIBRARIES+=("libbluray")
+    ;; 
   --enable-all-free | -all-free)
     EXTERNAL_LIBRARIES+=" ${SUPPORTED_LIBRARIES_FREE[@]}"
     ;;
@@ -155,4 +158,3 @@ export FFMPEG_EXTERNAL_LIBRARIES=${EXTERNAL_LIBRARIES[@]}
 # Desired Android API level to use during compilation
 # Will be replaced with 21 for 64bit ABIs if the value is less than 21
 export DESIRED_ANDROID_API_LEVEL=${API_LEVEL}
-export DESIRED_BINUTILS=${BINUTILS}
