@@ -39,6 +39,14 @@ function prepareOutput() {
   OUTPUT_HEADERS=${OUTPUT_DIR}/include/${ANDROID_ABI}
   mkdir -p ${OUTPUT_HEADERS}
   cp -r ${BUILD_DIR_FFMPEG}/${ANDROID_ABI}/include/* ${OUTPUT_HEADERS}
+
+  zip -r ${ANDROID_ABI}_lib.zip ${OUTPUT_LIB}
+  echo "try zip output lib to ${ANDROID_ABI}_lib.zip "
+  ls -al output
+
+  zip -r ${ANDROID_ABI}_header.zip ${OUTPUT_HEADERS} 
+  echo "try zip output header to ${ANDROID_ABI}_header.zip "
+  ls -al output
 }
 
 # Saving stats about text relocation presence.

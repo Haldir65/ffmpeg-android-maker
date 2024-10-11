@@ -20,3 +20,11 @@ jobs:
           export ANDROID_SDK_HOME=$ANDROID_HOME
           export ANDROID_NDK_HOME=$ANDROID_NDK_LATEST_HOME
           ./ffmpeg-android-maker.sh -all-free -all-gpl -android=24 -abis=${{ matrix.abi }}
+          
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: "ffmpeg-android-maker-${{ matrix.abi }}.zip"
+          path: ${{ github.workspace }}/*.zip   
+          if-no-files-found: error
+          retention-days: 7 
