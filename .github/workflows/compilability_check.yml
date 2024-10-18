@@ -2,7 +2,7 @@ name: Compilability check
 on: [ push, pull_request ]
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         abi: [ "armeabi-v7a", "arm64-v8a", "x86", "x86_64" ]
@@ -12,8 +12,7 @@ jobs:
 
       - name: Setup the environment
         run: |
-          sudo pip3 install meson==1.5.2
-          sudo apt-get install nasm ninja-build
+          sudo apt install meson nasm ninja-build
 
       - name: Executing the script
         run: |
